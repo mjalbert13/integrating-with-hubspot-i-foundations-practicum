@@ -14,15 +14,15 @@ const PRIVATE_APP_ACCESS = 'pat-na1-5bbf2d8f-7eb7-4b8c-8ea1-ec484c7171e1';
 
 // * Code for Route 1 goes here
 app.get('/contacts', async (req, res) => {
-    const contacts = 'https://api.hubspot.com/crm/v3/objects/contacts';
+    const bikes = 'https://api.hubspot.com/crm/v3/objects/bikes';
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
     }
     try {
-        const resp = await axios.get(contacts, { headers });
+        const resp = await axios.get(bikes, { headers });
         const data = resp.data.results;
-        res.render('Contacts', { title: 'Contacts | HubSpot APIs', data });      
+        res.render('Bikes', { title: 'Bikes | HubSpot APIs', data });      
     } catch (error) {
         console.error(error);
     }
@@ -38,8 +38,8 @@ app.post('/update', async (req, res) => {
         }
     }
 
-    const email = req.query.email;
-    const updateContact = `https://api.hubapi.com/crm/v3/objects/contacts/${email}?idProperty=email`;
+    const brand = req.query.brand;
+    const updateContact = `https://api.hubapi.com/crm/v3/objects/bikes/${brand}?idProperty=brand`;
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
@@ -101,7 +101,28 @@ app.post('/update', async (req, res) => {
 
 });
 */
+app.post('/update', async (req, res) => {
+    const update = {
+        properties: {
+            "favorite_book": req.body.newVal
+        }
+    }
 
+    const brand = req.query.brand;
+    const updateContact = `https://api.hubapi.com/crm/v3/objects/bikes/${brand}?idProperty=brand`;
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    try { 
+        await axios.patch(updateContact, update, { headers } );
+        res.redirect('back');
+    } catch(err) {
+        console.error(err);
+    }
+
+});
 
 // * Localhost
 app.listen(3000, () => console.log('Listening on http://localhost:3000'));
