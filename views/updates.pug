@@ -1,0 +1,9 @@
+form(action="/update", method="POST")
+  input(type="hidden", name="id", value="{{ bike.id }}")
+  label(for="name") Bike Name:
+  input(type="text", name="name", value="{{ bike.name }}")
+  label(for="type") Bike Type:
+  input(type="text", name="type", value="{{ bike.type }}")
+  label(for="brand") Bike Brand:
+  input(type="text", name="brand", value="{{ bike.brand }}")
+  button(type="submit") Update
