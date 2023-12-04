@@ -8,8 +8,17 @@ html
         link(rel="stylesheet", href="/css/style.css")
     body    
         h1 Bikes
-        .cards 
-            each contact in data
-                .card 
-                    h2.card__name #{bikes.properties.brand}  #{bike.properties.name}
-                    p.card__email #{bikes.properties.type}
+     
+
+        table
+            thead
+            tr
+                th Bike
+                th Type
+                th Brand
+            tbody
+            each bike in data
+                tr
+                td= bike.name
+                td= bike.type
+                td= bike.brand
