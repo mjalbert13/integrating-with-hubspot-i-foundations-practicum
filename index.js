@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // * Please include the private app access token in your repo BUT only an access token built in a TEST ACCOUNT. Don't do this practicum in your normal account.
-const PRIVATE_APP_ACCESS = 'pat-na1-5bbf2d8f-7eb7-4b8c-8ea1-ec484c7171e1';
+const PRIVATE_APP_ACCESS = process.env.APP_SECRET
 const HUB_BASE_URI ='https://api.hubspot.com/crm/v3';
 const PORT = 3000;
 
