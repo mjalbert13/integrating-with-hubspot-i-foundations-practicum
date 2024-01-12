@@ -9,12 +9,16 @@ app.use(express.json());
 
 // * Please include the private app access token in your repo BUT only an access token built in a TEST ACCOUNT. Don't do this practicum in your normal account.
 const PRIVATE_APP_ACCESS = 'pat-na1-5bbf2d8f-7eb7-4b8c-8ea1-ec484c7171e1';
+const HUB_BASE_URI ='https://api.hubspot.com/crm/v3';
+const PORT = 3000;
+
+const baseURI = `http://localhost:${PORT}`;
 
 // TODO: ROUTE 1 - Create a new app.get route for the homepage to call your custom object data. Pass this data along to the front-end and create a new pug template in the views folder.
 
 // * Code for Route 1 goes here
-app.get('/contacts', async (req, res) => {
-    const bikes = 'https://api.hubspot.com/crm/v3/objects/2-18611658';
+app.get('/', async (req, res) => {
+    const bikes = 'https://api.hubspot.com/crm/v3/objects/bikes?properties=bike_name,brand,bike_type';
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
@@ -22,7 +26,7 @@ app.get('/contacts', async (req, res) => {
     try {
         const resp = await axios.get(bikes, { headers });
         const data = resp.data.results;
-        res.render('Bikes', { title: 'Bikes | HubSpot APIs', data });      
+        res.render('bikes',  { baseURI: baseURI + "/", data });      
     } catch (error) {
         console.error(error);
     }
@@ -71,7 +75,7 @@ app.post('/update', async (req, res) => {
     }
 
     const brand = req.query.brand;
-    const updateContact = `https://api.hubapi.com/crm/v3/objects/bikes/${brand}?idProperty=brand`;
+    const updateContact = `https://api.hubapi.com/crm/v3/objects/bikes?`;
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
@@ -87,6 +91,6 @@ app.post('/update', async (req, res) => {
 });
 
 // * Localhost
-app.listen(3000, () => console.log('Listening on http://localhost:3000'));
+app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
 
 
