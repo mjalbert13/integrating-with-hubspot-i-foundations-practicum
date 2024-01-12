@@ -32,30 +32,27 @@ app.get('/', async (req, res) => {
     }
 });
 
+
+
+
 // TODO: ROUTE 2 - Create a new app.get route for the form to create or update new custom object data. Send this data along in the next route.
 
 // * Code for Route 2 goes here
-app.post('/update', async (req, res) => {
-    const update = {
-        properties: {
-            "favorite_book": req.body.newVal
-        }
-    }
 
-    const brand = req.query.brand;
-    const updateContact = `https://api.hubapi.com/crm/v3/objects/bikes/${brand}?idProperty=brand`;
+
+app.get('/update', async (req, res) => {
+    const contacts = 'https://api.hubspot.com/crm/v3/objects/bikes';
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
-    };
-
-    try { 
-        await axios.patch(updateContact, update, { headers } );
-        res.redirect('back');
-    } catch(err) {
-        console.error(err);
     }
-
+    try {
+        const resp = await axios.get(contacts, { headers });
+        const data = resp.data.results;
+        res.render('updates',  { baseURI: baseURI + "/update", data });      
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
@@ -67,28 +64,31 @@ app.post('/update', async (req, res) => {
 
 * * App.get sample
 */
-app.post('/update', async (req, res) => {
-    const update = {
-        properties: {
-            "favorite_book": req.body.newVal
-        }
-    }
-
-    const brand = req.query.brand;
-    const updateContact = `https://api.hubapi.com/crm/v3/objects/bikes?`;
-    const headers = {
-        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
-        'Content-Type': 'application/json'
-    };
-
-    try { 
-        await axios.patch(updateContact, update, { headers } );
-        res.redirect('back');
-    } catch(err) {
-        console.error(err);
-    }
-
+app.post("/update", async (req, res) => {
+    console.log("Post Req:  ")
+  const update = {
+    properties: {
+      bike_name: req.body?.bike_name ?? 'Ranger',
+      brand: req?.body?.brand ?? 'Norco',
+      bike_type: req?.body?.bike_type ?? 'Mountain',
+    },
+  };
+  console.log(update);
+  const updateCustomObject = 'https://api.hubspot.com/crm/v3/objects/bikes';
+  const headers = {
+    Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+    "Content-Type": "application/json",
+  };
+  try {
+    await axios.post(updateCustomObject, update, { headers });
+    res.redirect("/");
+  } catch (e) {
+    console.error(e.message);
+    res.redirect("/");
+  }
 });
+
+
 
 // * Localhost
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
